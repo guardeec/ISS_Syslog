@@ -1,0 +1,15 @@
+<manifest alg="2" build="2015.0.0.309" opt="false" iceEnabled="true" iceMarkupVersion="2" exportTarget="other" domain="syslog.com" resolutions="1x" timestamp="1478537370771">
+  <folder name="css">
+    <file name="site_global.css" crc="4052507572"/>
+    <file name="master_______-a.css" crc="4041758487" ref="index:search"/>
+    <file name="index.css" crc="3838938011" ref="index"/>
+    <file name="search.css" crc="471364487" ref="search"/>
+  </folder>
+  <folder name="scripts">
+    <file name="jquery-1.8.3.min.js" crc="4255413929" ref="index:search"/>
+    <file name="museutils.js" crc="183364071" ref="index:search"/>
+    <file name="jquery.watch.js" crc="71412426" ref="index:search"/>
+  </folder>
+  <file name="index.html" crc="4294324524" seo="true" mt="1478527158610" redirect="true"/>
+  <file name="search.html" crc="45693427" seo="true" mt="1478537283116" redirect="true"/>
+</manifest>

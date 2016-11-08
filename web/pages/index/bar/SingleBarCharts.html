@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+</style>
+<body>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script>
+
+    var width = 960, height = 50;
+    var colors = [
+        d3.rgb(234, 77, 51),
+        d3.rgb(241, 138, 63),
+        d3.rgb(253, 199, 65),
+        d3.rgb(255, 240, 63),
+        d3.rgb(175, 204, 74),
+        d3.rgb(147, 170, 66),
+        d3.rgb(33, 163, 89),
+        d3.rgb(8, 170, 168),
+    ];
+    var svg = d3.select("body").append("svg").attr("width", 960).attr("height", 60);
+    var barContainer = svg.append("svg").attr("width", 960).attr("height", 30);
+    var lengendContainer = svg.append("svg").attr("y", 40).attr("width", 960).attr("height", 20);
+
+
+
+    var drawBar = function(mainBar, previosBarPosition, barWidth, color, title, height){
+        mainBar.append("rect")
+                .attr("x", previosBarPosition)
+                .attr("y", 0)
+                .attr("width", barWidth*width)
+                .attr("height", height)
+                .attr("opacity", 1)
+                .attr("fill", color)
+                .append("svg:title")
+                .text(title+" "+barWidth*100+"%");
+    }
+    var drawText = function(container, x, y, text, fill){
+        container.append("text")
+                .attr("x", x)
+                .attr("y", y)
+                .text(text)
+                .attr("font-family", "sans-serif")
+                .attr("font-size", "15px")
+                .attr("fill", fill);
+    }
+
+    var lengendBarWidth = 60/width;
+    var barPadding = width/8;
+    var leftPadding = barPadding/4;
+    drawBar(lengendContainer, leftPadding+barPadding*0, lengendBarWidth, colors[0], "", 20);
+    drawText(lengendContainer, leftPadding+barPadding*0+8, 15, "Emerg", "white");
+
+    drawBar(lengendContainer, leftPadding+barPadding*1, lengendBarWidth, colors[1], "", 20);
+    drawText(lengendContainer, leftPadding+barPadding*1+14, 15, "Alert", "white");
+
+    drawBar(lengendContainer, leftPadding+barPadding*2, lengendBarWidth, colors[2], "", 20);
+    drawText(lengendContainer, leftPadding+barPadding*2+7, 15, "Critical", "White");
+
+    drawBar(lengendContainer, leftPadding+barPadding*3, lengendBarWidth, colors[3], "", 20);
+    drawText(lengendContainer, leftPadding+barPadding*3+12, 15, "Error", "White");
+
+    drawBar(lengendContainer, leftPadding+barPadding*4, lengendBarWidth, colors[4], "", 20);
+    drawText(lengendContainer, leftPadding+barPadding*4+12, 15, "Warn", "White");
+
+    drawBar(lengendContainer, leftPadding+barPadding*5, lengendBarWidth, colors[5], "", 20);
+    drawText(lengendContainer, leftPadding+barPadding*5+8, 15, "Notice", "White");
+
+    drawBar(lengendContainer, leftPadding+barPadding*6, lengendBarWidth, colors[6], "", 20);
+    drawText(lengendContainer, leftPadding+barPadding*6+16, 15, "Info", "White");
+
+    drawBar(lengendContainer, leftPadding+barPadding*7, lengendBarWidth, colors[7], "", 20);
+    drawText(lengendContainer, leftPadding+barPadding*7+8, 15, "Debug", "White");
+
+    var previosData;
+
+    var viz = function(){
+        d3.json("http://91.151.187.30:1401/SyslogISS/logsSingleBarViz", function(error, d) {
+            if(previosData!=d){
+                barContainer.remove();
+                barContainer = svg.append("svg").attr("width", 960).attr("height", 30);
+                var previosBarPosition = 0;
+                if(d.bars.emergency!=undefined){
+                    drawBar(barContainer, previosBarPosition, d.bars.emergency, colors[0], "Emergency");
+                    previosBarPosition+=d.bars.emergency*width;
+                }
+                if(d.bars.alert!=undefined){
+                    drawBar(barContainer, previosBarPosition, d.bars.alert, colors[1], "Alert", 30);
+                    previosBarPosition+=d.bars.alert*width;
+                }
+                if(d.bars.critical!=undefined){
+                    drawBar(barContainer, previosBarPosition, d.bars.critical, colors[2], "Critical", 30);
+                    previosBarPosition+=d.bars.critical*width;
+                }
+                if(d.bars.error!=undefined){
+                    drawBar(barContainer, previosBarPosition, d.bars.error, colors[3], "Error", 30);
+                    previosBarPosition+=d.bars.error*width;
+                }
+                if(d.bars.warning!=undefined){
+                    drawBar(barContainer, previosBarPosition, d.bars.warning, colors[4], "Warning", 30);
+                    previosBarPosition+=d.bars.warning*width;
+                }
+                if(d.bars.notice!=undefined){
+                    drawBar(barContainer, previosBarPosition, d.bars.notice, colors[5], "Notice", 30);
+                    previosBarPosition+=d.bars.notice*width;
+                }
+                if(d.bars.info!=undefined){
+                    drawBar(barContainer, previosBarPosition, d.bars.info, colors[6], "Info", 30);
+                    previosBarPosition+=d.bars.info*width;
+                }
+                if(d.bars.debug!=undefined){
+                    drawBar(barContainer, previosBarPosition, d.bars.debug, colors[7], "Debug", 30);
+                    previosBarPosition+=d.bars.debug*width;
+                }
+                previosData=d;
+            }
+        })
+
+    }
+
+
+    d3.json("http://91.151.187.30:1401/SyslogISS/logsSingleBarViz", function(error, d) {
+        previosData=d;
+        viz();
+    })
+
+    setInterval(viz, 1000);
+</script>
+</body>

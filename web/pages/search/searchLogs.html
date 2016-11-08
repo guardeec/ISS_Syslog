@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<meta charset='utf-8'>
+<html>
+  <head>
+      <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+      
+      <style>
+          .inputSortForm { 
+            margin: auto;
+            padding: 10px;
+           }
+         
+          .button{
+            -webkit-appearance: none;
+            appearance: none;
+            border: solid 1px #c9c9c9;
+            box-shadow: none;
+            border-radius: 0;
+            background-color: cornflowerblue;
+            box-sizing: border-box;
+            height: 20px;
+            color: white;
+          }
+          
+          .field{
+              -webkit-appearance: none;
+              appearance: none;
+              border: solid 1px #c9c9c9;
+              box-shadow: none;
+              border-radius: 0;
+              box-sizing: border-box;
+              width: 155px;
+              height: 20px;
+          }
+          
+          .resultTable{
+              padding-top: 5px;
+              margin: auto;
+              width: 100%;
+          }
+          .resultTableHeader{
+              -webkit-appearance: none;
+              appearance: none;
+              height: 30px;
+              font-family: sans-serif;
+              background-color: #4CAF50;
+              color: white;
+          }
+          .text{
+              font-family: sans-serif;
+              color: dimgrey;
+              height: 25px;
+              text-align: center;
+          }
+          
+          .controllButtonsTable{
+              width: 100%;
+          }
+          .controllButtonsRight{
+              text-align: right;
+          }
+          .controllButtonsCurrentPageField{
+              -webkit-appearance: none;
+              appearance: none;
+              border: solid 1px #c9c9c9;
+              box-shadow: none;
+              border-radius: 0;
+              box-sizing: border-box;
+              width: 30px;
+              height: 20px;
+              text-align: center;
+          }
+      </style>
+  </head>
+  <body>
+ 
+      <div id="inputSortForm" class="inputSortForm" align="center">
+              <table >
+                    <tr>
+                        <td>
+                            <input id="MessageValue" type="text" name="Message" class="field"/>
+                            <label class="text">Message</label>
+                        </td>
+                        <td style="padding-left: 10px">
+                            <input id="TimeFromValue" type="time" name="TimeFrom" value="" class="field"/>
+                            <label class="text">-</label>
+                            <input id="TimeToValue" type="time" name="TimeTo" value="" class="field"/>
+                            <label class="text">Time</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input id="HostValue" type="text" name="Host" value="" class="field"/>
+                            <label class="text">Host</label>
+                        </td>
+                        <td style="padding-left: 10px">
+                            <input id="DateFromValue" type="date" name="DateFrom" value="" class="field"/>
+                            <label class="text">-</label>
+                            <input id="DateToValue" type="date" name="DateTo" value="" class="field"/>
+                            <label class="text">Date</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <select id="SiverityValue" class="field">
+                                <option></option>
+                                <option>Emergency: system is unusable</option>
+                                <option>Alert: action must be taken immediately</option>
+                                <option>Critical: critical conditions</option>
+                                <option>Error: error conditions</option>
+                                <option>Warning: warning conditions</option>
+                                <option>Notice: normal but significant condition</option>
+                                <option>Informational: informational messages</option>
+                                <option>Debug: debug-level messages</option>
+                            </select>
+                            <label class="text">Severity</label>
+                            
+                        </td>
+                        <td style="padding-left: 10px">
+                            <input id="IdFromValue" min="0" type="number" name="IdFrom" value="" class="field"/>
+                            <label class="text">-</label>
+                            <input id="IdToValue" min="0" type="number" name="IdTo" value="" class="field"/>
+                            <label class="text">ID</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <select id="FacilityValue" class="field">
+                                <option></option>
+                                <option>kernel messages</option>
+                                <option>user-level messages</option>
+                                <option>mail system</option>
+                                <option>system daemons</option>
+                                <option>security/authorization messages</option>
+                                <option>messages generated internally by syslog</option>
+                                <option>line printer subsystem</option>
+                                <option>network news subsystem</option>
+                                <option>UUCP subsystem</option>
+                                <option>clock daemon</option>
+                                <option>security/authorization messages (note 2)</option>
+                                <option>FTP daemon</option>
+                                <option>NTP subsystem</option>
+                                <option>log audit</option>
+                                <option>log alert</option>
+                                <option>clock daemon (note 2)</option>
+                                <option>local use 0 (local0)</option>
+                                <option>local use 1 (local1)</option>
+                                <option>local use 2 (local2)</option>
+                                <option>local use 3 (local3)</option>
+                                <option>local use 4 (local4)</option>
+                                <option>local use 5 (local5)</option>
+                                <option>local use 6 (local6)</option>
+                                <option>local use 7 (local7)</option>
+                            </select>
+                            <label class="text">Facility</label>
+                        </td>
+                        <td style="padding-left: 148px">
+                            <input type="button" onclick="getData()" value="Найти" class="button"/>
+                        </td>
+                    </tr>
+              </table>
+      </div>
+
+      
+      
+
+      <div id="controllButtons">
+        <table class="controllButtonsTable">
+            <tr>
+                <td>
+                    <button class="button" onclick="onChangeCurrentPage(false, false, true, false)"><<</button>
+                    <button class="button" onclick="onChangeCurrentPage(true, false, false, false)"><</button>
+                </td>
+                <td style="text-align: center">
+                    <input id="currentPage" min="1" max="5" type="number" name="currentPage" value="1" class="controllButtonsCurrentPageField" onChange="onChangeCurrentPage(false, false, false, false)"/>
+                     -
+                    <input id="currentPageMax" type="text" name="currentPageMAX" disabled=true value="1" class="controllButtonsCurrentPageField" style="padding-left: 0"/>
+                </td>
+                <td class="controllButtonsRight">
+                    <button class="button" onclick="onChangeCurrentPage(false, true, false, false)">></button>
+                    <button class="button" onclick="onChangeCurrentPage(false, false, false, true)">>></button>
+                </td>
+            </tr>
+        </table>
+      </div>
+      <div id="resultTable" name="resultTable"></div>
+
+      
+     
+    <script type='text/javascript' src='http://91.151.187.30:1401/SyslogISS/pages/search/script.js'></script>
+  </body>
+</html>

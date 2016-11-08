@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="DataBase" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+        <!-- getAccess -->
+        <property name="driverClass" value="org.postgresql.Driver" />
+        <property name="jdbcUrl" value="jdbc:postgresql://localhost:5432/iss_syslog_db" />
+        <property name="user" value="iss_syslog_admin" />
+        <property name="password" value="1$$_$y$l0g_@dm1n" />
+        <!-- pool sizing -->
+        <property name="initialPoolSize" value="100" />
+        <property name="minPoolSize" value="10" />
+        <property name="maxPoolSize" value="10000" />
+        <property name="acquireIncrement" value="2" />
+        <property name="maxStatements" value="0" />
+        <!-- retries -->
+        <property name="acquireRetryAttempts" value="30" />
+        <property name="acquireRetryDelay" value="1000" /> <!-- 1s -->
+        <property name="breakAfterAcquireFailure" value="false" />
+        <!-- refreshing connections -->
+        <property name="maxIdleTime" value="60" /> <!-- 1min -->
+        <property name="maxConnectionAge" value="10" /> <!-- 1h -->
+        <!-- timeouts and testing -->
+        <property name="checkoutTimeout" value="1000" /> <!-- 1s -->
+        <property name="idleConnectionTestPeriod" value="60" /> <!-- 60 -->
+        <property name="testConnectionOnCheckout" value="true" />
+        <property name="preferredTestQuery" value="SELECT 1" />
+        <property name="testConnectionOnCheckin" value="true" />
+    </bean>
+
+    <bean id="SyslogDAO" class="dao.SyslogDataBaseDAO">
+        <property name="dataSource" ref="DataBase" />
+    </bean>
+
+
+
+</beans>
